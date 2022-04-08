@@ -23,10 +23,15 @@
 
 // Program constant definitions
 const unsigned char maxCount = 50;
+ #define pressed 0
+ #define notPressed 1
 
 // Program variable definitions
 unsigned char SW2Count = 0;
 bool SW2Pressed = false;
+
+unsigned char SW5Count = 0;
+bool SW5Pressed = false;
 
 int main(void)
 {
@@ -37,7 +42,7 @@ int main(void)
     // Code in this while loop runs repeatedly.
     while(1)
 	{
-        // Count SW2 button presses
+    // Count SW2 button presses
         if(SW2 == 0)
         {
             LED3 = 1;
@@ -78,12 +83,18 @@ int main(void)
  *    What is the the maximum value an 8-bit variable can store?
  *    What are some benefits and drawbacks of using 8-bit variables in an 8-bit
  *    microcontroller?
+
+ The maximum value an 8-bit variable can store is 255, which is eight 1's in binary code. Or 2^8 = 256, so integers 0 through 255.
+
  * 
  * 2. The constant 'maxCount' is defined using a declaration similar to that
  *    used for the SW2Count variable, but with the 'const' prefix added in the
  *    declaration. Can you think of some advantages of declaring a constant like
  *    this, using a separate statement above the main code, rather than just
  *    embedding the value of the constant where it is needed in the code?
+
+ Advantages like this is that you are able to use the variable for any other potential blockes of code below or between it. Plus, it will set it to a global variable.
+ If you decide to declare it inside the block of code as well, the variable will always stay constant to the set global value.
  * 
  * 3. This program should light LED D3 every time SW2 is pressed, and light
  *    LED D4 once the count reaches 50. Try it, and count how many times you
@@ -92,6 +103,10 @@ int main(void)
  * 
  *    Did your count reach 50? Can you describe what the program is doing?
  *    (Hint: try pressing and releasing the button at different rates of speed.)
+
+ My count did not reach 50, because the program is counting the total time of how long I am pressing down the buttons. 
+ For example, I can hold it once and it will flash up around half a second to a second after, or press it several times rapdily until it lights up, which can be like 8 times.
+ The counting depends on the length of how long I am holding down the button.
  * 
  * 4. Modify the second 'if' structure to add the else block, as shown below:
 
@@ -109,6 +124,9 @@ int main(void)
  *    higher than maxCount. If LED D4 turns off, what can you infer about the
  *    value of the SW2Count variable? Can you explain what happens to the
  *    SW2Count variable as the SW2 button is held?
+
+ If LED D4 turns on, I can infer that the code is being reset because the SW2 button is going beyond its variable limit. As the SW2 button is held,
+ the SW2Count variable is being overwritten and restarting.
  * 
  * 5. We can set a limit on the SW2Count variable by encapsulating its increment
  *    statement inside a conditional statement. In your program, replace the
@@ -124,6 +142,9 @@ int main(void)
  *    but in a more compact form. After adding this code, what is the maximum
  *    value that the SW2Count variable will reach? How does this affect the
  *    operation of LED D4 when SW2 is held?
+
+ After adding this code, the maximum value the SW2Count variable will reach 254 because the "if statement" will only work if SW2Count is less than 255.
+ It affects the operation of LED D4 when SW2 is held by making it continuously flash after SW2Count reaches 50 and will not stop and flash again like in question 4.
  *
  * 6. The fundamental problem with this program is that pushbutton SW2 is sensed
  *    in each cycle of the loop and if its state is read as pressed, another
@@ -205,6 +226,40 @@ int main(void)
         }
         
  * 
+// Count new SW2 button presses
+        if(SW2 == pressed && SW2Pressed == false)
+        {
+            LED3 = 1;
+            if(SW2Count < 255)
+            {
+                SW2Count = SW2Count + 1;
+            }
+            SW2Pressed = true;
+        }
+
+        // Clear pressed state if released
+        if(SW2 == notPressed)
+        {
+            LED3 = 0;
+            SW2Pressed = false;
+        }
+        
+        if(SW2Count >= maxCount)
+        {
+            LED4 = 1;
+        }
+         else
+        {
+            LED4 = 0;
+        }
+        
+        // Reset count and turn off LED D4
+        if(SW3 == pressed)
+        {
+            LED4 = 0;
+            SW2Count = 0;
+        }
+
  * Programming Activities
  * 
  * 1. Can you make a two-player rapid-clicker style game using this program as 
@@ -217,11 +272,83 @@ int main(void)
  *    second palyer wins. Use a logical condition statement to reset the game
  *    by clearing the count and turning off the LEDs if either SW3 or SW4 is
  *    pressed.
+
+ 
+// Count new SW2 button presses
+        if(SW2 == pressed && SW2Pressed == false)
+        {
+            LED3 = 1;
+            if(SW2Count < 255)
+            {
+                SW2Count = SW2Count + 1;
+            }
+            SW2Pressed = true;
+        }
+
+        // Clear pressed state if released
+        if(SW2 == notPressed)
+        {
+            LED3 = 0;
+            SW2Pressed = false;
+        }
+        
+        if(SW2Count >= maxCount)
+        {
+            LED4 = 1;
+        }
+         else
+        {
+            LED4 = 0;
+        }
+        
+
+//Second Player
+// Count new SW5 button presses
+        if(SW5 == pressed && SW5Pressed == false)
+        {
+            LED6 = 1;
+            if(SW5Count < 255)
+            {
+                SW5Count = SW5Count + 1;
+            }
+            SW5Pressed = true;
+        }
+
+        // Clear pressed state if released
+        if(SW5 == notPressed)
+        {
+            LED6 = 0;
+            SW5Pressed = false;
+        }
+        
+        if(SW5Count >= maxCount)
+        {
+            LED5 = 1;
+        }
+         else
+        {
+            LED5 = 0;
+        }
+        
+        // Reset count and turn off either LED4 or LED5
+        if(SW3 == pressed && SW4 == pressed)
+        {
+            LED4 = 0;
+            SW2Count = 0;
+            LED5 = 0;
+            SW5Count = 0;
+        }
  * 
  * 2. Use your knowledge of Boolean variables and logical conditions to simulate
  *    a toggle button. Each new press of the toggle button will 'toggle' an LED
  *    to its opposite state. (Toggle buttons are commonly used as push-on, 
  *    push-off power buttons in digital devices.)
+
+    if{SW4 == pressed}(
+        LED5 = 1;)
+    else(
+        LED5 = 0;
+    )
  * 
  * 3. A multi-function button can be used to enable one action when pressed, and
  *    a second or alternate action when held. A variable that counts loop cycles
@@ -229,6 +356,17 @@ int main(void)
  *    program unitentionally did, because of the loop structure). Make a
  *    multifunction button that lights one LED when a button is pressed, and
  *    lights a second LED after the button is held for more that one second.
+
+
+ if(SW2 == 0)
+        {
+            LED3 = 1;
+            SW2Count = SW2Count + 1;
+        }
+        else
+        {
+            LED3 = 0;
+        }
  * 
  * 4. Do your pushbuttons bounce? Switch bounce is the term that describes
  *    switch contacts repeatedly closing and opening before settling in their
