@@ -22,7 +22,7 @@
 // TODO Set linker code offset to '800' under "Additional options" pull-down.
 
 // Program constant definitions
-const unsigned char maxCount = 50;
+const unsigned char maxCount = 100;
  #define pressed 0
  #define notPressed 1
 
@@ -33,6 +33,10 @@ bool SW2Pressed = false;
 unsigned char SW5Count = 0;
 bool SW5Pressed = false;
 
+bool SW4Pressed = false;
+unsigned char SW3Count = 0;
+
+
 int main(void)
 {
     // Configure oscillator and I/O ports. These functions run once at start-up.
@@ -42,29 +46,17 @@ int main(void)
     // Code in this while loop runs repeatedly.
     while(1)
 	{
-    // Count SW2 button presses
-        if(SW2 == 0)
+     
+for(int i = 0; i < pressed; i ++){      
+        if(SW4 == pressed)
         {
-            LED3 = 1;
-            SW2Count = SW2Count + 1;
-        }
-        else
-        {
-            LED3 = 0;
-        }
-        
-        if(SW2Count >= maxCount)
-        {
-            LED4 = 1;
-        }
-        
-        // Reset count and turn off LED D4
-        if(SW3 == 0)
-        {
-            LED4 = 0;
-            SW2Count = 0;
-        }
-        
+            LED5 = 1;
+            }
+            return 0;
+}
+
+
+
         // Add a short delay to the main while loop.
         __delay_ms(10);
         
@@ -73,9 +65,10 @@ int main(void)
         {
             RESET();
         }
-    }
-}
 
+}
+}
+    
 /* Program Analysis
  * 
  * 1. The 'SW2Count' variable is created within RAM as an 8-bit memory location
@@ -85,6 +78,8 @@ int main(void)
  *    microcontroller?
 
  The maximum value an 8-bit variable can store is 255, which is eight 1's in binary code. Or 2^8 = 256, so integers 0 through 255.
+ Benefits of this is that the 8-bit microcontroller is working within its native boundaries of values between 0 and 255. It will process the variable the fastest, compared to using larger variables. 
+ However, this can be an issuse if you wish to work with larger variables because the MCU will require more steps and a longer amount of time to process the information.
 
  * 
  * 2. The constant 'maxCount' is defined using a declaration similar to that
@@ -344,11 +339,8 @@ int main(void)
  *    to its opposite state. (Toggle buttons are commonly used as push-on, 
  *    push-off power buttons in digital devices.)
 
-    if{SW4 == pressed}(
-        LED5 = 1;)
-    else(
-        LED5 = 0;
-    )
+   //toggle button
+  
  * 
  * 3. A multi-function button can be used to enable one action when pressed, and
  *    a second or alternate action when held. A variable that counts loop cycles
@@ -357,16 +349,23 @@ int main(void)
  *    multifunction button that lights one LED when a button is pressed, and
  *    lights a second LED after the button is held for more that one second.
 
-
- if(SW2 == 0)
+     if(SW3 == pressed)
+       {
+           LED4 = 1;
+           SW3Count = SW3Count + 1;
+       }
+      
+       if(SW3Count >= maxCount)
+       {
+           LED5 = 1;
+       }
+       if(SW4 == pressed)
         {
-            LED3 = 1;
-            SW2Count = SW2Count + 1;
+            LED4 = 0;
+            LED5 = 0;
+            SW3Count = 0;
         }
-        else
-        {
-            LED3 = 0;
-        }
+ 
  * 
  * 4. Do your pushbuttons bounce? Switch bounce is the term that describes
  *    switch contacts repeatedly closing and opening before settling in their
@@ -378,9 +377,25 @@ int main(void)
  *    to reset the count and turn off the LEDs so that the test can be repeated.
  *    To determine if your switches bounce, try pressing them at various speeds
  *    and using different amounts of force.
+
+unsigned char SW4Count = 0;
+//toggle button
+for(int i = 0; i < pressed; i ++){      
+        if(SW4 == pressed)
+        {
+            LED5 = 1;
+            }
+}
+if(SW5 == pressed){
+    LED 5 = 0;
+    SW4Count = 0;
+}
  * 
  * 5. Did your pushbuttons bounce? Can you think of a technique similar to the
  *    multi-function button that could be implemented to make your program
  *    ignore switch bounces. Multiple switch activations within a 50ms time span
  *    might indicate switch bounce and can be safely ignored.
+
+ A technique similar to a multi-function button is having a fair time span between each press. 
  */
+ 
