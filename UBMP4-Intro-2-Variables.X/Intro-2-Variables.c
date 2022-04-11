@@ -37,6 +37,8 @@ bool SW4Pressed = false;
 unsigned char SW3Count = 0;
 
 
+
+
 int main(void)
 {
     // Configure oscillator and I/O ports. These functions run once at start-up.
@@ -46,17 +48,21 @@ int main(void)
     // Code in this while loop runs repeatedly.
     while(1)
 	{
-     
-for(int i = 0; i < pressed; i ++){      
-        if(SW4 == pressed)
-        {
-            LED5 = 1;
-            }
-            return 0;
-}
-
-
-
+   
+        if(SW4 == 0){
+        LED5 = 1;
+        }
+        __delay_ms(50);
+        SW3Count ++;
+    
+        if(SW4 == 0 && SW3Count < 2){
+        LED5 = 0;
+        }
+        if(SW3Count == 2){
+        SW3Count = 0;
+        }
+        __delay_ms(100);
+    
         // Add a short delay to the main while loop.
         __delay_ms(10);
         
@@ -340,6 +346,18 @@ for(int i = 0; i < pressed; i ++){
  *    push-off power buttons in digital devices.)
 
    //toggle button
+   if(SW4 == 0){
+        LED5 = 1;
+        }
+        
+        SW3Count ++;
+    
+        if(SW4 == 0 && SW3Count < 2){
+        LED5 = 0;
+        }
+        if(SW3Count == 2){
+        SW3Count = 0;
+        }
   
  * 
  * 3. A multi-function button can be used to enable one action when pressed, and
@@ -378,13 +396,23 @@ for(int i = 0; i < pressed; i ++){
  *    To determine if your switches bounce, try pressing them at various speeds
  *    and using different amounts of force.
 
-unsigned char SW4Count = 0;
-//toggle button
-for(int i = 0; i < pressed; i ++){      
-        if(SW4 == pressed)
+//if button = 0, Count +1, and every +1 LED flash with delay.
+if(SW3 == pressed)
+       {
+           LED4 = 1;
+           SW3Count = SW3Count + 1;
+       }
+      
+       if(SW3Count >= maxCount)
+       {
+           LED5 = 1;
+       }
+       if(SW4 == pressed)
         {
-            LED5 = 1;
-            }
+            LED4 = 0;
+            LED5 = 0;
+            SW3Count = 0;
+        }
 }
 if(SW5 == pressed){
     LED 5 = 0;
