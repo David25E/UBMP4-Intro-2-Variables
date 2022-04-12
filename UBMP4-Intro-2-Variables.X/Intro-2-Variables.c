@@ -129,8 +129,8 @@ Thus, it will be easier to modify the code to avoid mistakes.
  *    value of the SW2Count variable? Can you explain what happens to the
  *    SW2Count variable as the SW2 button is held?
 
- If LED D4 turns on, I can infer that the code is being reset because the SW2 button is going beyond its variable limit. As the SW2 button is held,
- the SW2Count variable is being overwritten and restarting.
+ If LED D4 turns off, I can infer that the code is being reset because the SW2 button is going beyond its variable limit. However, it turns back on and repeatedly turns off and on.
+ As the SW2 button is held, the SW2Count variable is being overwritten and restarting.
  * 
  * 5. We can set a limit on the SW2Count variable by encapsulating its increment
  *    statement inside a conditional statement. In your program, replace the
