@@ -49,20 +49,22 @@ int main(void)
     while(1)
 	{
    
-        if(SW4 == 0){
-        LED5 = 1;
+        if(SW3 == pressed)
+       {
+           LED4 = 1;
+           SW3Count = SW3Count + 1;
+       }
+      
+       if(SW3Count >= maxCount)
+       {
+           LED5 = 1;
+       }
+       if(SW4 == pressed)
+        {
+            LED4 = 0;
+            LED5 = 0;
+            SW3Count = 0;
         }
-        __delay_ms(50);
-        SW3Count ++;
-    
-        if(SW4 == 0 && SW3Count < 2){
-        LED5 = 0;
-        }
-        if(SW3Count == 2){
-        SW3Count = 0;
-        }
-        __delay_ms(100);
-    
         // Add a short delay to the main while loop.
         __delay_ms(10);
         
@@ -94,8 +96,8 @@ int main(void)
  *    this, using a separate statement above the main code, rather than just
  *    embedding the value of the constant where it is needed in the code?
 
- Advantages like this is that you are able to use the variable for any other potential blockes of code below or between it. Plus, it will set it to a global variable.
- If you decide to declare it inside the block of code as well, the variable will always stay constant to the set global value.
+ Advantages like this is that you are able to use the variable for any other potential blocks of code below or between it. Plus, it will set it to a global variable.
+ If you decide to declare it inside a block of code as well, the variable will always stay constant to the set global value, which is good for readbility since the reader will understand the value won't change.
  * 
  * 3. This program should light LED D3 every time SW2 is pressed, and light
  *    LED D4 once the count reaches 50. Try it, and count how many times you
@@ -106,8 +108,8 @@ int main(void)
  *    (Hint: try pressing and releasing the button at different rates of speed.)
 
  My count did not reach 50, because the program is counting the total time of how long I am pressing down the buttons. 
- For example, I can hold it once and it will flash up around half a second to a second after, or press it several times rapdily until it lights up, which can be like 8 times.
- The counting depends on the length of how long I am holding down the button.
+ For example, I can hold it once and it will flash up around half a second to a second after, or press it several times rapdily until it lights up, which can be like 8 repetitions.
+ The counting depends on the total lengths of how long I am holding down the button.
  * 
  * 4. Modify the second 'if' structure to add the else block, as shown below:
 
@@ -145,7 +147,7 @@ int main(void)
  *    operation of LED D4 when SW2 is held?
 
  After adding this code, the maximum value the SW2Count variable will reach 254 because the "if statement" will only work if SW2Count is less than 255.
- It affects the operation of LED D4 when SW2 is held by making it continuously flash after SW2Count reaches 50 and will not stop and flash again like in question 4.
+ It affects the operation of LED D4 when SW2 is held by making it continuously flash after SW2Count reaches 50, which will continue and repeatedly flash like in question 4.
  *
  * 6. The fundamental problem with this program is that pushbutton SW2 is sensed
  *    in each cycle of the loop and if its state is read as pressed, another
@@ -207,26 +209,7 @@ int main(void)
  *    the definition statement instead of making it obvious in the if structure.
  *    Try it in your code, and modify the SW3 reset button to work with the same
  *    pressed adn notPressed definitions.
- 
-        // Count new SW2 button presses
-        if(SW2 == pressed && SW2Pressed == false)
-        {
-            LED3 = 1;
-            if(SW2Count < 255)
-            {
-                SW2Count = SW2Count + 1;
-            }
-            SW2Pressed = true;
-        }
-
-        // Clear pressed state if released
-        if(SW2 == notPressed)
-        {
-            LED3 = 0;
-            SW2Pressed = false;
-        }
         
- * 
 // Count new SW2 button presses
         if(SW2 == pressed && SW2Pressed == false)
         {
@@ -358,6 +341,21 @@ int main(void)
         if(SW3Count == 2){
         SW3Count = 0;
         }
+
+//toggle button without bounces
+if(SW4 == 0){
+        LED5 = 1;
+        }
+        __delay_ms(150);
+        SW3Count ++;
+    
+        if(SW4 == 0 && SW3Count < 2){
+        LED5 = 0;
+        }
+        if(SW3Count == 2){
+        SW3Count = 0;
+        }
+        __delay_ms(140);
   
  * 
  * 3. A multi-function button can be used to enable one action when pressed, and
@@ -396,8 +394,48 @@ int main(void)
  *    To determine if your switches bounce, try pressing them at various speeds
  *    and using different amounts of force.
 
-//if button = 0, Count +1, and every +1 LED flash with delay.
-if(SW3 == pressed)
+ Yes, my push buttons do bounce with my toggle button.
+
+//toggle button
+unsigned char PushCount = 0;
+        if(SW4 == 0){
+        LED5 = 1;
+        }
+        
+        SW3Count ++;
+    
+        if(SW4 == 0 && SW3Count < 2){
+        LED5 = 0;
+        }
+        if(SW3Count == 2){
+        SW3Count = 0;
+        }
+//count. Wouldn't it continue to count if I hold the button?
+        if(SW4 == 0){
+        LED6 = 1;
+        PushCount + 1;
+        }
+        else{
+            LED6 = 0;
+        }
+//reset
+        if(SW5 == 0){
+            LED6 = 0;
+            LED5 = 0;
+            PushCount = 0;
+        }
+
+
+ * 
+ * 5. Did your pushbuttons bounce? Can you think of a technique similar to the
+ *    multi-function button that could be implemented to make your program
+ *    ignore switch bounces. Multiple switch activations within a 50ms time span
+ *    might indicate switch bounce and can be safely ignored.
+
+No, my push buttons do not bounce because I have another push button that turns off the LED's.
+ A technique similar to a multi-function button is holding down the button for a specific amount of time for each button. 
+ For example, light an LED when pressed, when held for 1 seconds, and when held for 3 seconds.
+    if(SW3 == pressed)
        {
            LED4 = 1;
            SW3Count = SW3Count + 1;
@@ -413,17 +451,6 @@ if(SW3 == pressed)
             LED5 = 0;
             SW3Count = 0;
         }
-}
-if(SW5 == pressed){
-    LED 5 = 0;
-    SW4Count = 0;
-}
- * 
- * 5. Did your pushbuttons bounce? Can you think of a technique similar to the
- *    multi-function button that could be implemented to make your program
- *    ignore switch bounces. Multiple switch activations within a 50ms time span
- *    might indicate switch bounce and can be safely ignored.
-
- A technique similar to a multi-function button is having a fair time span between each press. 
+ 
  */
  
