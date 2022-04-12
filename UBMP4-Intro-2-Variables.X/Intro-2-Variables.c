@@ -48,8 +48,7 @@ int main(void)
     // Code in this while loop runs repeatedly.
     while(1)
 	{
-   
-        if(SW3 == pressed)
+      if(SW3 == pressed)
        {
            LED4 = 1;
            SW3Count = SW3Count + 1;
@@ -65,6 +64,7 @@ int main(void)
             LED5 = 0;
             SW3Count = 0;
         }
+        
         // Add a short delay to the main while loop.
         __delay_ms(10);
         
@@ -85,9 +85,9 @@ int main(void)
  *    What are some benefits and drawbacks of using 8-bit variables in an 8-bit
  *    microcontroller?
 
- The maximum value an 8-bit variable can store is 255, which is eight 1's in binary code. Or 2^8 = 256, so integers 0 through 255.
+ The maximum value an 8-bit variable can store is 255, which is eight 1's in binary code. Or 2^8 = 256, so integers 0 through 255. Plus, it is efficient to use because power's of 2's are simple to work with.
  Benefits of this is that the 8-bit microcontroller is working within its native boundaries of values between 0 and 255. It will process the variable the fastest, compared to using larger variables. 
- However, this can be an issuse if you wish to work with larger variables because the MCU will require more steps and a longer amount of time to process the information.
+ However, this can be an issuse if you wish to work with larger variables because the MCU will require more steps to understand the code, and a longer amount of time to process the information.
 
  * 
  * 2. The constant 'maxCount' is defined using a declaration similar to that
@@ -98,6 +98,7 @@ int main(void)
 
  Advantages like this is that you are able to use the variable for any other potential blocks of code below or between it. Plus, it will set it to a global variable.
  If you decide to declare it inside a block of code as well, the variable will always stay constant to the set global value, which is good for readbility since the reader will understand the value won't change.
+Thus, it will be easier to modify the code to avoid mistakes.
  * 
  * 3. This program should light LED D3 every time SW2 is pressed, and light
  *    LED D4 once the count reaches 50. Try it, and count how many times you
@@ -109,7 +110,7 @@ int main(void)
 
  My count did not reach 50, because the program is counting the total time of how long I am pressing down the buttons. 
  For example, I can hold it once and it will flash up around half a second to a second after, or press it several times rapdily until it lights up, which can be like 8 repetitions.
- The counting depends on the total lengths of how long I am holding down the button.
+ The counting depends on the total time of how long I am holding down the button.
  * 
  * 4. Modify the second 'if' structure to add the else block, as shown below:
 
@@ -343,19 +344,22 @@ int main(void)
         }
 
 //toggle button without bounces
-if(SW4 == 0){
+        __delay_ms(50);
+        if(SW4 == 0){
         LED5 = 1;
         }
-        __delay_ms(150);
+       
         SW3Count ++;
-    
+        __delay_ms(50);
         if(SW4 == 0 && SW3Count < 2){
         LED5 = 0;
         }
+        __delay_ms(100);
         if(SW3Count == 2){
         SW3Count = 0;
         }
-        __delay_ms(140);
+        __delay_ms(50);
+        
   
  * 
  * 3. A multi-function button can be used to enable one action when pressed, and
@@ -365,6 +369,7 @@ if(SW4 == 0){
  *    multifunction button that lights one LED when a button is pressed, and
  *    lights a second LED after the button is held for more that one second.
 
+//How would I change this since if I continously press SW3, LED5 still lights up.
      if(SW3 == pressed)
        {
            LED4 = 1;
@@ -434,23 +439,7 @@ unsigned char PushCount = 0;
 
 No, my push buttons do not bounce because I have another push button that turns off the LED's.
  A technique similar to a multi-function button is holding down the button for a specific amount of time for each button. 
- For example, light an LED when pressed, when held for 1 seconds, and when held for 3 seconds.
-    if(SW3 == pressed)
-       {
-           LED4 = 1;
-           SW3Count = SW3Count + 1;
-       }
-      
-       if(SW3Count >= maxCount)
-       {
-           LED5 = 1;
-       }
-       if(SW4 == pressed)
-        {
-            LED4 = 0;
-            LED5 = 0;
-            SW3Count = 0;
-        }
- 
+ For example, light an LED when pressed, when held for 1 seconds, when held for 3 seconds, etc.
+    
  */
  
