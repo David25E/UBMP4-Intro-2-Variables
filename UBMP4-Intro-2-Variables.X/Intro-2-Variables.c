@@ -36,6 +36,7 @@ bool SW5Pressed = false;
 bool SW4Pressed = false;
 unsigned char SW3Count = 0;
 
+bool LED4OnState = false;
 
 
 
@@ -48,18 +49,19 @@ int main(void)
     // Code in this while loop runs repeatedly.
     while(1)
 	{
-        if(SW3 == 0){
-        LED3 = 1;
-        SW3Count ++;
-        if(SW3Count > maxCount){
+        if(SW3 == 0 && LED4OnState == false){
             LED4 = 1;
+        __delay_us_(50);
+            LED4OnState = true;
         }
-        }
-        else{
-            SW3Count = 0;
-            LED3 = 0;
+        __delay_ms(5);
+        if(LED4OnState == true && SW3 == 0){
             LED4 = 0;
+        __delay_us(50);
+            LED4OnState = false;
         }
+        
+
 
         // Add a short delay to the main while loop.
         __delay_ms(10);
@@ -432,6 +434,7 @@ unsigned char PushCount = 0;
  *    ignore switch bounces. Multiple switch activations within a 50ms time span
  *    might indicate switch bounce and can be safely ignored.
 
-Yes, my push buttons bounce. A technique that could be implemented is placing time delays in the code.
+Yes, my push buttons bounce. 
+A technique that could be implemented is placing time delays between each status check/each change in status to prevent any rapid repetition of code while pressing the button.
  */
  
