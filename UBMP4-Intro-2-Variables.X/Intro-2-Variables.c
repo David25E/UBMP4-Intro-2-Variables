@@ -48,23 +48,19 @@ int main(void)
     // Code in this while loop runs repeatedly.
     while(1)
 	{
-      if(SW3 == pressed)
-       {
-           LED4 = 1;
-           SW3Count = SW3Count + 1;
-       }
-      
-       if(SW3Count >= maxCount)
-       {
-           LED5 = 1;
-       }
-       if(SW4 == pressed)
-        {
-            LED4 = 0;
-            LED5 = 0;
-            SW3Count = 0;
+        if(SW3 == 0){
+        LED3 = 1;
+        SW3Count ++;
+        if(SW3Count > maxCount){
+            LED4 = 1;
         }
-        
+        }
+        else{
+            SW3Count = 0;
+            LED3 = 0;
+            LED4 = 0;
+        }
+
         // Add a short delay to the main while loop.
         __delay_ms(10);
         
@@ -316,12 +312,15 @@ Thus, it will be easier to modify the code to avoid mistakes.
         }
         
         // Reset count and turn off either LED4 or LED5
-        if(SW3 == pressed && SW4 == pressed)
+        if(LED4 == 1 || LED5 == 1)
         {
+            __delay_ms(400);
+            if(SW3 == pressed && SW4 == pressed){
             LED4 = 0;
             SW2Count = 0;
             LED5 = 0;
             SW5Count = 0;
+            }
         }
  * 
  * 2. Use your knowledge of Boolean variables and logical conditions to simulate
@@ -369,23 +368,19 @@ Thus, it will be easier to modify the code to avoid mistakes.
  *    multifunction button that lights one LED when a button is pressed, and
  *    lights a second LED after the button is held for more that one second.
 
-//How would I change this since if I continously press SW3, LED5 still lights up.
-     if(SW3 == pressed)
-       {
-           LED4 = 1;
-           SW3Count = SW3Count + 1;
-       }
-      
-       if(SW3Count >= maxCount)
-       {
-           LED5 = 1;
-       }
-       if(SW4 == pressed)
-        {
-            LED4 = 0;
-            LED5 = 0;
-            SW3Count = 0;
+        if(SW3 == 0){
+        LED3 = 1;
+        SW3Count ++;
+        if(SW3Count > maxCount){
+            LED4 = 1;
         }
+        }
+        else{
+            SW3Count = 0;
+            LED3 = 0;
+            LED4 = 0;
+        }
+        
  
  * 
  * 4. Do your pushbuttons bounce? Switch bounce is the term that describes
@@ -437,9 +432,6 @@ unsigned char PushCount = 0;
  *    ignore switch bounces. Multiple switch activations within a 50ms time span
  *    might indicate switch bounce and can be safely ignored.
 
-No, my push buttons do not bounce because I have another push button that turns off the LED's.
- A technique similar to a multi-function button is holding down the button for a specific amount of time for each button. 
- For example, light an LED when pressed, when held for 1 seconds, when held for 3 seconds, etc.
-    
+Yes, my push buttons bounce. A technique that could be implemented is placing time delays in the code.
  */
  
