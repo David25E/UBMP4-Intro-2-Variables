@@ -51,14 +51,15 @@ int main(void)
 	{
         if(SW3 == 0 && LED4OnState == false){
             LED4 = 1;
-        __delay_us_(50);
+
             LED4OnState = true;
+            __delay_ms(200);
         }
-        __delay_ms(5);
+
         if(LED4OnState == true && SW3 == 0){
             LED4 = 0;
-        __delay_us(50);
             LED4OnState = false;
+            __delay_ms(200);
         }
         
 
@@ -313,7 +314,7 @@ Thus, it will be easier to modify the code to avoid mistakes.
             LED5 = 0;
         }
         
-        // Reset count and turn off either LED4 or LED5
+        // Reset count and turn off either LED4 or LED5     // changed the reset button
         if(LED4 == 1 || LED5 == 1)
         {
             __delay_ms(400);
@@ -330,36 +331,17 @@ Thus, it will be easier to modify the code to avoid mistakes.
  *    to its opposite state. (Toggle buttons are commonly used as push-on, 
  *    push-off power buttons in digital devices.)
 
-   //toggle button
-   if(SW4 == 0){
-        LED5 = 1;
-        }
-        
-        SW3Count ++;
-    
-        if(SW4 == 0 && SW3Count < 2){
-        LED5 = 0;
-        }
-        if(SW3Count == 2){
-        SW3Count = 0;
+//new toggle button without delays
+        if(SW3 == 0 && LED4OnState == false){
+            LED4 = 1;
+
+            LED4OnState = true;
         }
 
-//toggle button without bounces
-        __delay_ms(50);
-        if(SW4 == 0){
-        LED5 = 1;
+        if(LED4OnState == true && SW3 == 0){
+            LED4 = 0;
+            LED4OnState = false;
         }
-       
-        SW3Count ++;
-        __delay_ms(50);
-        if(SW4 == 0 && SW3Count < 2){
-        LED5 = 0;
-        }
-        __delay_ms(100);
-        if(SW3Count == 2){
-        SW3Count = 0;
-        }
-        __delay_ms(50);
         
   
  * 
@@ -436,5 +418,18 @@ unsigned char PushCount = 0;
 
 Yes, my push buttons bounce. 
 A technique that could be implemented is placing time delays between each status check/each change in status to prevent any rapid repetition of code while pressing the button.
+For example, to prevent bounces this toggle button works.
+        if(SW3 == 0 && LED4OnState == false){
+            LED4 = 1;
+
+            LED4OnState = true;
+            __delay_ms(200);
+        }
+
+        if(LED4OnState == true && SW3 == 0){
+            LED4 = 0;
+            LED4OnState = false;
+            __delay_ms(200);
+        }
  */
  
